@@ -1,0 +1,11 @@
+- name: Install app-test
+  gather_facts: true
+  hosts: app-test-group
+  #remote_user: user
+  become: yes 
+  #become_user: user
+  #become_method: sudo
+  
+  roles:
+    - app-test
+

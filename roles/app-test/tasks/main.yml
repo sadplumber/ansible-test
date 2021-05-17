@@ -1,0 +1,47 @@
+---
+# tasks file for app-test
+
+- name: distr
+  debug:
+    msg: "{{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_major_version'] }}"
+  #tags: agent_test
+
+# Postgres install
+
+- name: Install Postgres on Ubuntu
+  block:
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    - name: Prepare
+      apt: 
+        name: ["wget", "curl"]
+        state: latest
+
+    - name: Add Postgres repo
+      shell: "add-apt-repository \"deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main\""
+
+    - name: Add Postgres key
+      shell: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    - name: Prepare
+      apt: 
+        name: postgresql-11
+        state: latest
+
+    - name: Check status Postgres
+      shell: "systemctl status postgresql"
+
+  when:
+    ( (ansible_facts['distribution'] == "Debian" ) )
+
+- name: Install Postgres on CentOS
+  block:
+
+  when:
+    ( (ansible_facts['distribution'] == "CentOS" ) )
