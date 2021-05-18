@@ -1,0 +1,53 @@
+- name: copy app
+  become_user: deployer
+  copy:
+    src: "{{ project_name }}"
+    dest: "/opt/"
+    force: no
+#  tags: copy
+
+- name: create virtualenv 
+  pip: "name=app-test virtualenv=/opt/{{project_name}}/env virtualenv_command=virtualenv"
+  
+
+#- name: Install project requirements
+#  pip:
+#    state: latest
+#    requirements: "/opt/python-sample-app/requirements.txt"
+#    virtualenv: "{{ venv_path }}"
+#    virtualenv_python: python3.6
+#    virtualenv_command: /usr/local/bin/virtualenv
+
+##################################################################################
+- name: Install python-dev
+  apt: "name='python-dev' state=present force=yes"
+
+- name: Install python-pip
+  apt: "name='python-pip' state=present force=yes"
+
+- name: install uwsgi
+  pip: name=uwsgi
+
+- name: Install supervisor
+
+  apt: name=supervisor state=present force=yes
+  when: is_installed.rc != 0
+
+- name: Create UWSGI vassals directory
+  file: "path={{vassals_dir}}  state=directory"
+
+- name: setup uwsgi in supervisor
+  template: "src=uwsgi-server.j2 dest={{supervisor_conf_dir}}/uwsgi-runner.conf"
+
+- name: update supervisor
+  supervisorctl: name=uwsgi-runner state=restarted
+
+- name: setup project uwsgi configuration file
+  template: "src=uwsgi.j2 dest=/home/{{project_name}}/{{project_name}}_uwsgi.ini"
+
+- name: create a symlink of uwsgi in vassals
+  file: "src=/home/{{project_name}}/{{project_name}}_uwsgi.ini dest=/etc/uwsgi/vassals/{{project_name}}_uwsgi.ini state=link"
+
+- name: touch the symlink file
+  command: "touch /etc/uwsgi/vassals/{{project_name}}_uwsgi.ini"
+ 

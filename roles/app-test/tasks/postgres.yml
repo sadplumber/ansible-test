@@ -1,0 +1,73 @@
+---
+# tasks file for app-test
+
+- name: distr
+  debug:
+    msg: "{{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_major_version'] }}"
+  #tags: agent_test
+
+  
+# Postgres install
+
+- name: Install Postgres on Ubuntu
+  block:
+    - name: Prepare
+      apt: 
+        name: ["wget", "curl", "acl"]
+        update_cache: true
+        state: latest
+
+    - name: Add pubkey Postgres repo
+      shell: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
+      
+    - name: Add Postgres repo
+      shell: "add-apt-repository \"deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main\""
+
+    - name: Add Postgres key
+      shell: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+    - name: Install Postgres
+      apt: name={{ item }} update_cache=true state=latest
+      with_items:
+        - postgresql-11
+        - postgresql-contrib
+        - libpq-dev
+        - python3-psycopg2
+        - python3-pip
+        - virtualenv
+    
+#    - name: Prepare
+#      apt: 
+#        name: postgresql-11
+#        state: latest
+
+    - name: Check status Postgres
+      shell: "systemctl status postgresql"
+
+  when:
+    ( (ansible_facts['distribution'] == "Ubuntu1" and ansible_facts['distribution_major_version'] == "20" ) )
+
+- name: Install Postgres on CentOS
+  block:
+    - name: empty task
+      debug:
+        msg: "Empty"
+  when:
+    ( (ansible_facts['distribution'] == "CentOS" ) )
+    
+- name: Create Postgres db
+  become_user: postgres
+  postgresql_db:
+    name: app
+    state: present
+
+- name: Create Postgres DB user
+  become_user: postgres
+  postgresql_user: 
+    db: app
+    name: worker
+    password: worker
+    priv: ALL
+    state: present
+
+ 
