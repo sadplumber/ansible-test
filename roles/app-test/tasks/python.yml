@@ -1,0 +1,19 @@
+---
+- name: install python dev
+  become: yes
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-dev
+    - python-setuptools
+
+- name: install pip
+  become: yes
+  easy_install: name=pip
+
+- name: install virtualenv
+  become: yes
+  pip: name={{ item }} state=present extra_args='--upgrade'
+  with_items:
+    - pip
+    - virtualenv
+    

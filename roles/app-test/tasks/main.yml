@@ -1,3 +1,4 @@
 - include: postgres.yaml
+- include: python.yaml
 - include: project.yaml
 - include: nginx.yaml
