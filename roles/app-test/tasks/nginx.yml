@@ -21,11 +21,6 @@
       become: yes
       notify: restart nginx
 
-    - name: create webroot dir
-      file: path={{ web_root_path }} state=directory
-            group={{ web_server_group }} mode=0755
-      become: yes
-
     - name: set nginx directories permissions
       file: path={{ item }} state=directory
             group={{ web_server_group }} mode=0755

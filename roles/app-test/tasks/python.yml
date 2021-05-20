@@ -1,14 +1,13 @@
 ---
 - name: install python dev
   become: yes
-  apt: pkg={{ item }} state=present
-  with_items:
-    - python-dev
-    - python-setuptools
+  apt: 
+    pkg: ['python-dev', 'python-setuptools', 'python3-pip'] 
+    state: present
 
-- name: install pip
-  become: yes
-  easy_install: name=pip
+#- name: install pip
+#  become: yes
+#  easy_install: name=pip
 
 - name: install virtualenv
   become: yes
