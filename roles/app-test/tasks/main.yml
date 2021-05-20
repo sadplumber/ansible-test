@@ -22,9 +22,10 @@
 
 #- include: postgres.yml
 - include: web_data_folders.yml
-- include: python.yml
-- include: supervisor.yml
-#- include: project.yml
 - include: project.yml
-#- include: nginx.yml
-#- include: uwsgi.yml
+- include: python.yml
+- include: uwsgi.yml
+- include: supervisor.yml
+
+- include: nginx.yml
+#

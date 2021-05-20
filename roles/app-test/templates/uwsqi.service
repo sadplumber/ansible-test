@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve mysite
+After=network.target
+
+[Service]
+User=dimraft
+Group=www-data
+WorkingDirectory=/home/dimraft/mysite
+Environment="PATH=/home/dimraft/mysite/mysiteenv/bin"
+ExecStart=/home/dimraft/mysite/mysiteenv/bin/uwsgi --ini mysite.ini
+
+[Install]
+WantedBy=multi-user.target

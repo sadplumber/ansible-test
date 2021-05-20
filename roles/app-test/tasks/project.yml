@@ -1,8 +1,11 @@
 - name: copy app
-  become_user: deployer
+  become: yes
   copy:
-    src: "{{ project_name }}"
+    src: "{{ project_name }}/"
     dest: "{{app_root_path }}"
+    owner: "{{ web_server_group }}" 
+    group: "{{ web_server_group }}" 
+    mode: "0774"
     force: no
 #  tags: copy
 

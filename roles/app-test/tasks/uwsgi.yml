@@ -14,3 +14,9 @@
 - name: configure app on uwsgi server
   template: src=uwsgi.ini dest={{ uwsgi_config_path }}/{{ uwsgi_app_ini }}
   become: yes 
+
+  - name: Run migrations
+  command: "{{ app_migration_command }}"
+  args:
+    chdir: "{{ app_app_directory }}"
+  when: app_run_migrations

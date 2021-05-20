@@ -7,14 +7,34 @@ app_name: python-sample-app
 app_root_path: "{{ web_root_path }}/{{ app_name }}_webapp"
 
 # NGINX
-app_nginx_hostname: localhost
+app_nginx_hostname: localhost _default;
 app_nginx_static_path: "{{ app_root_path }}/{{ app_name }}/static/"
 
 # UWSGI
 app_uwsgi_port: 5000
-app_uwsgi_executable: "app:make_wsgi_app()"
+#app_uwsgi_executable: "app:make_wsgi_app()"
+app_uwsgi_executable: "app:create_app()"
+
 app_uwsgi_envs: {}
 
 # Virtualenvs
 virtualenv_root_path: "{{ web_root_path }}/virtualenvs"
 app_venv: "{{ virtualenv_root_path }}/{{ app_name }}"
+
+# Postgresql db user
+postgresql_user: worker
+
+# Postgresql db password
+postgresql_password: worker
+
+# Postgresql db name
+postgresql_db: app
+
+# Defines if migrations should be run during deployment
+app_run_migrations: false
+
+# Directory with migrations scripts
+app_migrations_dir: ../migrations
+
+# Migration command
+app_migration_command: flask db upgrade

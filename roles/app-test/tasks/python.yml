@@ -9,10 +9,13 @@
 #  become: yes
 #  easy_install: name=pip
 
-- name: install virtualenv
-  become: yes
-  pip: name={{ item }} state=present extra_args='--upgrade'
-  with_items:
-    - pip
-    - virtualenv
+#- name: install virtualenv
+#  become: yes
+#  pip: name={{ item }} state=present extra_args='--upgrade'
+#  with_items:
+#    - pip
+#    - virtualenv
     
+- name: Initiate virtualenv
+  pip: virtualenv="{{ app_venv }}" 
+       requirements="{{ app_root_path }}/requirements.txt"

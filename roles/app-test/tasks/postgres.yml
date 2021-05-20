@@ -48,15 +48,15 @@
 - name: Create Postgres db
   become_user: postgres
   postgresql_db:
-    name: app
+    name: "{{ postgresql_db }}"
     state: present
 
 - name: Create Postgres DB user
   become_user: postgres
   postgresql_user: 
-    db: app
-    name: worker
-    password: worker
+    db: "{{ postgresql_db }}"
+    name: "{{ postgresql_user }}"
+    password: "{{ postgresql_password }}"
     priv: ALL
     state: present
 

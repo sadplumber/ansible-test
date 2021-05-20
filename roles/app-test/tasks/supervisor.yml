@@ -20,6 +20,6 @@
   become: yes
 
 - name: upload supervisor configuration to web server home
-  template: src=supervisor/app_supervisor.conf dest=/etc/supervisor/conf.d/{{ supervisor_app_config }}
+  template: src=supervisor.conf dest=/etc/supervisor/conf.d/{{ supervisor_app_config }}
   become: yes
   notify: start supervisord
