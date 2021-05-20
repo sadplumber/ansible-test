@@ -21,10 +21,10 @@
     ( (ansible_facts['distribution'] == "Ubuntu" and ansible_facts['distribution_major_version'] == "20" ) )
 
 #- include: postgres.yml
+- include: web_data_folders.yml
 - include: python.yml
 - include: supervisor.yml
 #- include: project.yml
-#- include: web_data_folders.yml
 - include: project.yml
 #- include: nginx.yml
 #- include: uwsgi.yml
