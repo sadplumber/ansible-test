@@ -2,7 +2,6 @@
 # vars file for app-test
 project_name: "python-sample-app"
 
----
 # vars file for ansible-nginx-uwsgi-supervisor
 
 # User

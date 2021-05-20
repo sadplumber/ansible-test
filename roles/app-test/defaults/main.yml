@@ -1,7 +1,7 @@
 ---
 # Web root paths + app name + home (for ubuntu)
-web_root_path: /srv/www
-web_server_group: www-data
+web_root_path_ubuntu: /var/www/app-test
+web_server_group_ubuntu: www-data
 
 app_name: app
 app_root_path: "{{ web_root_path }}/{{ app_name }}_webapp"

@@ -7,7 +7,7 @@
       become: yes
 
     - name: configure nginx
-      template: src=nginx/nginx.conf dest=/etc/nginx/sites-available/{{ nginx_app_config }}
+      template: src=nginx.conf dest=/etc/nginx/sites-available/{{ nginx_app_config }}
       become: yes
 
     - name: link to enable nginx configuration
@@ -21,6 +21,11 @@
       become: yes
       notify: restart nginx
 
+    - name: create webroot dir
+      file: path={{ web_root_path }} state=directory
+            group={{ web_server_group }} mode=0755
+      become: yes
+
     - name: set nginx directories permissions
       file: path={{ item }} state=directory
             group={{ web_server_group }} mode=0755
@@ -29,6 +34,7 @@
         - /etc/nginx
         - /etc/nginx/sites-available
         - /etc/nginx/sites-enabled
+        - "{{ web_root_path }}"
       become: yes
 
     - name: set nginx logs permissions
@@ -37,5 +43,5 @@
       with_items:
         - access.log
         - error.log
-    when:
+  when:
     ( (ansible_facts['distribution'] == "Ubuntu" and ansible_facts['distribution_major_version'] == "20" ) )

@@ -1,4 +1,9 @@
-- name Prepare
+- name: distr
+  debug:
+    msg: "{{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_major_version'] }}"
+  #tags: agent_test
+  
+- name: Prepare
   block:
     - name: Prepare
       apt: 
@@ -7,14 +12,16 @@
         state: latest
   
       # Web root paths + app name + home
-    - set_fact:
-      - web_root_path: /srv/www
-      - web_server_group: www-data
+    - name: setup vars for ubuntu
+      set_fact:
+       web_root_path: "{{ web_root_path_ubuntu }}"
+       web_server_group: "{{ web_server_group_ubuntu }}"
 
   when:
     ( (ansible_facts['distribution'] == "Ubuntu" and ansible_facts['distribution_major_version'] == "20" ) )
 
-#- include: postgres.yaml
-#- include: python.yaml
-#- include: project.yaml
-- include: nginx.yaml
+#- include: postgres.yml
+#- include: python.yml
+#- include: project.yml
+- include: web_data_folders.yml
+- include: nginx.yml

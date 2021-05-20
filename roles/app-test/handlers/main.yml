@@ -1,2 +1,6 @@
 ---
 # handlers file for app-test
+
+- name: restart nginx
+  service: name=nginx state=restarted
+  become: yes
