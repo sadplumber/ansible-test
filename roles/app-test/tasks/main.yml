@@ -1,4 +1,20 @@
-- include: postgres.yaml
-- include: python.yaml
-- include: project.yaml
+- name Prepare
+  block:
+    - name: Prepare
+      apt: 
+        name: ["wget", "curl", "acl"]
+        update_cache: true
+        state: latest
+  
+      # Web root paths + app name + home
+    - set_fact:
+      - web_root_path: /srv/www
+      - web_server_group: www-data
+
+  when:
+    ( (ansible_facts['distribution'] == "Ubuntu" and ansible_facts['distribution_major_version'] == "20" ) )
+
+#- include: postgres.yaml
+#- include: python.yaml
+#- include: project.yaml
 - include: nginx.yaml
