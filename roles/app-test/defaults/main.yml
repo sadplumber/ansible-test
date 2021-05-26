@@ -31,7 +31,7 @@ postgresql_password: worker
 postgresql_db: app
 
 # Defines if migrations should be run during deployment
-app_run_migrations: false
+app_run_migrations: true
 
 # Directory with migrations scripts
 app_migrations_dir: ../migrations

@@ -15,8 +15,17 @@
   template: src=uwsgi.ini dest={{ uwsgi_config_path }}/{{ uwsgi_app_ini }}
   become: yes 
 
-  - name: Run migrations
-  command: "{{ app_migration_command }}"
+- name: Run migrations
+  command: "{{ app_venv }}/bin/{{ app_migration_command }}"
   args:
-    chdir: "{{ app_app_directory }}"
-  when: app_run_migrations
+    chdir: "{{ app_root_path }}"
+  environment:
+    FLASK_APP: app.py
+    POSTGRESQL_URL: postgresql://worker:worker@localhost/app
+    LANG: en_US.utf-8
+  become: yes
+  become_user: "{{ web_server_group }}"
+  run_once: true
+  #when: app_run_migrations
+
+
